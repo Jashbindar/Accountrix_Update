@@ -8,40 +8,40 @@
 
 @using System.Threading.Tasks
 
-<div class="transaction-page">
+<div class="transaction-page" style="display: flex; flex-direction: column; align-items: center; padding: 2em;">
+    <h2 style="color: #ffffff;">Asset Management</h2>
 
-    <div class="assets-page">
-        <div class="add-items">
-            <MudPaper Class="pa-8 ma-2" Outlined="true" Style="height: 20em; width: 20em; background-color: #1e1e2d; display: flex; flex-direction: column; align-items: center; justify-content: space-between; border-radius: 25px;">
-                <div>
-                    <MudTextField Class="transaction-customtextfield" @bind-Value="_item.itemname" Label="Item Name" Variant="Variant.Text" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Inventory" AdornmentColor="Color.Warning" />
-                    <MudTextField Class="transaction-customtextfield" @bind-Value="_item.itemcount" Label="Item Quantity" Variant="Variant.Text" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Numbers" AdornmentColor="Color.Warning" />
-                    <MudTextField Class="transaction-customtextfield" @bind-Value="_item.price" Label="Item Price" Variant="Variant.Text" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney" AdornmentColor="Color.Warning" />
-                </div>
-                <div>
-                    <MudButton OnClick="async() => await SaveItem()" Variant="Variant.Filled" Size="Size.Large" Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.Save">Save Items</MudButton>
-                </div>
-            </MudPaper>
-        </div>
+    <div style="display: flex; flex-direction: row; gap: 2em; margin-top: 2em;">
+
+        <!-- Add Item Section -->
+        <MudPaper Class="pa-8 ma-2" Outlined="true" Style="height: 22em; width: 22em; background-color: #1e1e2d; display: flex; flex-direction: column; align-items: center; padding: 1em; border-radius: 25px;">
+            <h3 style="color: #ffffff; margin-bottom: 1em;">Add Item</h3>
+            <MudTextField Class="transaction-customtextfield" @bind-Value="_item.itemname" Label="Item Name" Variant="Variant.Text"
+                          Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Inventory" AdornmentColor="Color.Warning" />
+            <MudTextField Class="transaction-customtextfield" @bind-Value="_item.itemcount" Label="Item Quantity" Variant="Variant.Text"
+                          Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Numbers" AdornmentColor="Color.Warning" />
+            <MudTextField Class="transaction-customtextfield" @bind-Value="_item.price" Label="Item Price" Variant="Variant.Text"
+                          Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney" AdornmentColor="Color.Warning" />
+
+            <MudButton OnClick="async() => await SaveItem()" Variant="Variant.Filled" Size="Size.Large" Color="Color.Tertiary"
+                       StartIcon="@Icons.Material.Filled.Save" Style="margin-top: 1em;">Save Item</MudButton>
+        </MudPaper>
+
+        <!-- Delete Item Section -->
+        <MudPaper Class="pa-8 ma-2" Outlined="true" Style="height: 14em; width: 22em; background-color: #1e1e2d; display: flex; flex-direction: column; align-items: center; padding: 1em; border-radius: 25px;">
+            <h3 style="color: #ffffff; margin-bottom: 1em;">Delete Item</h3>
+            <MudTextField Class="transaction-customtextfield" @bind-Value="itemID_to_del" Label="Enter Item ID" Variant="Variant.Text" />
+
+            <MudButton OnClick="async() => await DeleteItem(itemID_to_del)" Variant="Variant.Filled" Size="Size.Large" Color="Color.Error"
+                       StartIcon="@Icons.Material.Filled.Delete" Style="margin-top: 1em;">Delete Item</MudButton>
+        </MudPaper>
     </div>
 
-    <div class="delete-page">
-        <div class="delete-items">
-            <MudPaper Class="pa-8 ma-2" Outlined="true" Style="height: 20em; width: 20em; background-color: #1e1e2d; display: flex; flex-direction: column; align-items: center; justify-content: space-between; border-radius: 25px">
-                <div>
-                    <MudTextField Class="transaction-customtextfield" @bind-Value="itemID_to_del" Label="Enter item ID" Variant="Variant.Text"></MudTextField>
-                </div>
-                <div>
-                    <MudButton OnClick="async() => await DeleteItem(itemID_to_del)" Variant="Variant.Filled" Size="Size.Large" Color="Color.Error" StartIcon="@Icons.Material.Filled.Save">Delete Item</MudButton>
-                </div>
-            </MudPaper>
-        </div>
-    </div>
-
-    <div class="delete-list-items">
-        <MudDataGrid Items="@itemlist" Filterable="false" SortMode="SortMode.None" Groupable="false">
+    <!-- Item List Table -->
+    <div style="width: 80%; margin-top: 2em;">
+        <MudDataGrid Items="@itemlist" Filterable="true" SortMode="SortMode.Multiple" Groupable="true">
             <Columns>
-                <PropertyColumn Property="context => context.itemname" Title="Item Name"/>
+                <PropertyColumn Property="context => context.itemname" Title="Item Name" />
                 <PropertyColumn Property="context => context.itemcount" Title="Item Quantity" />
                 <PropertyColumn Property="context => context.price" Title="Item Price" />
                 <PropertyColumn Property="context => context.itemID" Title="Item ID" />
@@ -49,6 +49,7 @@
         </MudDataGrid>
     </div>
 </div>
+
 
 @code {
     private IQueryable<Item> itemlist = null;
